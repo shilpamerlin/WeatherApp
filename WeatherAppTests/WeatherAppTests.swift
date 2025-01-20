@@ -8,29 +8,56 @@
 import XCTest
 @testable import WeatherApp
 
+@MainActor
 final class HomeWeatherViewModelTests: XCTestCase {
-
-        override func setUpWithError() throws {
-            // Put setup code here. This method is called before the invocation of each test method in the class.
-        }
-
-        override func tearDownWithError() throws {
-            // Put teardown code here. This method is called after the invocation of each test method in the class.
-        }
-
-        func testExample() throws {
-            // This is an example of a functional test case.
-            // Use XCTAssert and related functions to verify your tests produce the correct results.
-            // Any test you write for XCTest can be annotated as throws and async.
-            // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-            // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-        }
-
-        func testPerformanceExample() throws {
-            // This is an example of a performance test case.
-            self.measure {
-                // Put the code you want to measure the time of here.
-            }
-        }
-
+    var viewModel: HomeWeatherViewModel!
+    var mockWeatherService: MockWeatherService!
+    
+    override func setUp() {
+        super.setUp()
+        mockWeatherService = MockWeatherService()
+        viewModel = HomeWeatherViewModel(weatherService: mockWeatherService)
     }
+    
+    override func tearDown() {
+        viewModel = nil
+        mockWeatherService = nil
+        super.tearDown()
+    }
+    
+    func testLoadUserDefaults_withSavedCity() {
+        StorageService.shared.saveSelectedCity("Toronto")
+        viewModel.loadCityFromUserDefault()
+        XCTAssertEqual(viewModel.selectedCity, "Toronto")
+    }
+    
+    func testFetchWeather_successfulResponse() async throws {
+        let mockWeather = Weather(location: Location(name: "Toronto"), current: Current(temperature: -2, condition: Condition(text: "Windy", iconURL: "httsp://icon.com"), humidity: 20, uvIndex: 12, feelsLikeTemperature: -10))
+        mockWeatherService.mockWeatherData = mockWeather
+        
+        let weather = try await mockWeatherService.fetchWeather(for: "Toronto")
+        
+        
+        XCTAssertEqual(weather.location.name, "Toronto")
+        XCTAssertEqual(weather.current.temperature, -2)
+        XCTAssertEqual(weather.current.condition.text, "Windy")
+        XCTAssertEqual(weather.current.humidity, 20)
+        XCTAssertEqual(weather.current.uvIndex, 12)
+        XCTAssertEqual(weather.current.feelsLikeTemperature, -10)
+    }
+    
+}
+
+//MARK: - Mock Service
+
+final class MockWeatherService: WeatherServiceProtocol {
+    var mockWeatherData: Weather?
+    var shouldThrowError = false
+    
+    func fetchWeather(for city: String) async throws -> Weather {
+        guard let weather = mockWeatherData else {
+            throw WeatherError.invalidData
+        }
+        return weather
+    }
+}

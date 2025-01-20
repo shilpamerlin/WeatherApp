@@ -17,16 +17,13 @@ struct SearchResultView: View {
                 Spacer()
                 ImageDownloader(imageURL: data.current.condition.iconURL)
                     .frame(height: 85, alignment: .center)
-            } else {
-                Text("Missing Weather Information")
-                    .font(.custom("Poppins-Medium", size: 20))
-            }
+            } 
         }
         .padding(20.0)
         .background(.extraLightGray)
         .cornerRadius(16.0)
         .onTapGesture {
-            guard (viewModel.weatherData?.location.name) != nil else {
+            guard let cityName = viewModel.weatherData?.location.name else {
                 return
             }
             viewModel.searchText = ""
@@ -62,8 +59,6 @@ struct CityWeatherView: View {
         }
     }
 }
-
-
 
 #Preview {
     var viewModel = HomeWeatherViewModel()
