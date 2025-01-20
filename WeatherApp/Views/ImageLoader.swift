@@ -16,8 +16,7 @@ struct ImageDownloader: View {
             .aspectRatio(contentMode: .fit)
         } placeholder: {
             Image(systemName: "photo")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            .aspectRatio(contentMode: .fit)
         }
     }
 }
