@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct HomeWeatherView: View {
-    @StateObject var viewModel = HomeWeatherViewModel()
+    @StateObject var viewModel: HomeWeatherViewModel
+    
+    // Initialize viewModel through the composition root
+       init(viewModel: HomeWeatherViewModel) {
+           _viewModel = StateObject(wrappedValue: viewModel)
+       }
     
     var body: some View {
         VStack {
@@ -21,9 +26,11 @@ struct HomeWeatherView: View {
                 
                 EmptyStateView(message: "No City Selected", description: "Please Search For A City")
                     .padding(.top, 20)
-            } else if let weatherData = viewModel.weatherData {
+            } else if let weatherData = viewModel.weatherData, let astronomyData = viewModel.astronomyData {
                 
-                WeatherDetailsView(weatherData: weatherData)
+                
+                WeatherDetailsView(weatherData: weatherData, astronomyData: astronomyData)
+                
                     .padding(.top, 20)
             } else {
                 EmptyStateView(message: "No City Found", description: "Please check the city name again")
@@ -48,6 +55,3 @@ struct HomeWeatherView: View {
     }
 }
 
-#Preview {
-    HomeWeatherView()
-}

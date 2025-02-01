@@ -19,6 +19,7 @@ struct SearchBarView: View {
             .font(.custom("Poppins-Regular", size: 15))
             .onSubmit {
                 viewModel.fetchWeather(for: viewModel.searchText)
+                viewModel.fetchAstronomyData(for: viewModel.searchText)
             }
             Image(systemName: imageName)
                 .imageScale(.small)

@@ -14,8 +14,29 @@ struct Weather: Codable, Equatable {
     
 struct Location: Codable, Equatable {
     let name: String
+
+}
+
+struct AstronomyResponse: Codable {
+    let location: Location
+    let astronomy: Astronomy
 }
     
+struct Astronomy: Codable, Equatable {
+    let astronomyData: Astro
+    enum CodingKeys: String, CodingKey {
+        case astronomyData = "astro"
+    }
+}
+
+struct Astro: Codable, Equatable {
+    let sunrise: String
+    let sunset: String
+    let moonrise: String
+    let moonset: String
+
+}
+
 struct Current: Codable, Equatable {
     let temperature: Double
     let condition: Condition

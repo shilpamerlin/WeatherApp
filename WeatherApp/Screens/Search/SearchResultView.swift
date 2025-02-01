@@ -26,6 +26,7 @@ struct SearchResultView: View {
             guard let cityName = viewModel.weatherData?.location.name else {
                 return
             }
+           
             viewModel.searchText = ""
             endEditing()
         }
@@ -60,7 +61,4 @@ struct CityWeatherView: View {
     }
 }
 
-#Preview {
-    var viewModel = HomeWeatherViewModel()
-    SearchResultView(viewModel: viewModel)
-}
+

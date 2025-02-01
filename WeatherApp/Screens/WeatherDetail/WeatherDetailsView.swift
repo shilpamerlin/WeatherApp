@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherDetailsView: View {
     let weatherData: Weather
+    let astronomyData: AstronomyResponse
     
     var body: some View {
         VStack {
@@ -33,11 +34,20 @@ struct WeatherDetailsView: View {
             }
             Spacer()
                 .frame(height: 25)
+            VStack(spacing: 25) {
             HStack(spacing: 56.0) {
                 WeatherPropertyView(title: "Humidity", value: "\(weatherData.current.humidity)%")
                 WeatherPropertyView(title: "UV", value: "\(weatherData.current.uvIndex)")
                 WeatherPropertyView(title: "Feels Like", value: "\(String(format:"%.0f", weatherData.current.feelsLikeTemperature))°")
             }
+            
+            HStack(spacing: 56.0) {
+                WeatherPropertyView(title: "Sunrise", value: "\(astronomyData.astronomy.astronomyData.sunrise)%")
+                WeatherPropertyView(title: "Sunset", value: "\(astronomyData.astronomy.astronomyData.sunset)")
+                WeatherPropertyView(title: "Moonrise", value: "\(astronomyData.astronomy.astronomyData.moonrise)")
+                WeatherPropertyView(title: "Moonset", value: "\(astronomyData.astronomy.astronomyData.moonset)")
+            }
+        }
             .padding(25)
             .background(.extraLightGray)
             .cornerRadius(16.0)

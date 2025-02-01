@@ -51,6 +51,8 @@ final class HomeWeatherViewModelTests: XCTestCase {
 //MARK: - Mock Service
 
 final class MockWeatherService: WeatherServiceProtocol {
+
+    
     var mockWeatherData: Weather?
     var shouldThrowError = false
     
